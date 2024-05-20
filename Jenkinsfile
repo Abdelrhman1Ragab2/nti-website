@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         // Credentials ID from AWS Credentials Plugin
-        AWS_ACCESS_KEY_ID = credentials('ecr-access-key')
-        AWS_SECRET_ACCESS_KEY = credentials('ecr-secret-key')
+        AWS_ACCESS_KEY_ID = credentials('aws-c')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-c')
         ECR_REPOSITORY_URI= '058264315018.dkr.ecr.eu-west-1.amazonaws.com/project-repo'
         AWS_REGION = 'us-west-1'
     }
