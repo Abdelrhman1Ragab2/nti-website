@@ -6,7 +6,7 @@ pipeline {
         AWS_ACCESS_KEY_ID = credentials('aws-c')
         AWS_SECRET_ACCESS_KEY = credentials('aws-c')
         ECR_REPOSITORY_URI= '058264315018.dkr.ecr.eu-west-1.amazonaws.com'
-        AWS_REGION = 'us-west-1'
+        AWS_REGION = 'eu-west-1'
     }
 
     stages {
