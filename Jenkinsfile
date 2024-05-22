@@ -35,14 +35,18 @@ pipeline {
         
         stage('kubectl aplly files') {
             steps {
+                script {
+                  // Set permissions for file.sh before running it
+                  sh 'chmod +x kubernetes.sh && ./kubernetes.sh'
+                }
                 //sh 'kubectl apply -f secret.yaml --validate=false'  
                // sh 'kubectl apply -f configmap.yaml --validate=false'
                // sh 'kubectl apply -f postgress_serves.yaml --validate=false'
                // sh 'kubectl apply -f postgress.yaml --validate=false'  
                // sh 'kubectl apply -f backend.yaml --validate=false'  
                // sh 'kubectl apply -f backend_service.yaml --validate=false'  
-                sh 'kubectl apply -f frontend.yaml --validate=false '  
-                sh 'kubectl apply -f frontend_service.yml --validate=false '  
+               //sh 'kubectl apply -f frontend.yaml --validate=false '  
+               // sh 'kubectl apply -f frontend_service.yml --validate=false '  
             }
         }
     }
