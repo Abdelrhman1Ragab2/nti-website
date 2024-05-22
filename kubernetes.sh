@@ -1,4 +1,5 @@
 #!/bin/bash
+aws eks update-kubeconfig --region eu-west-1 --name nti
 kubectl apply -f secret.yaml --validate=false 
 kubectl apply -f configmap.yaml --validate=false
 kubectl apply -f postgress_serves.yaml --validate=false
