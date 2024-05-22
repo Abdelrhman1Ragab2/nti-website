@@ -10,44 +10,53 @@ pipeline {
     }
 
     stages {
-       //  stage('Build Docker Image front') {
-       //      steps {
+         stage('Build Docker Image front') {
+             steps {
                
-       //          sh 'docker build -t ${ECR_REPOSITORY_URI}/project-repo:${BUILD_NUMBER} ./frontend/.'
-       //          sh 'aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPOSITORY_URI}'
-       //          sh 'docker push ${ECR_REPOSITORY_URI}/project-repo:${BUILD_NUMBER}'
-       //      }
-       //  }
-       //  stage('Build Docker Image back') {
-       //      steps {
-       //          sh 'docker build -t ${ECR_REPOSITORY_URI}/my-ecr-repo:${BUILD_NUMBER} ./backend/.'
-       //          sh 'aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPOSITORY_URI}'
-       //          sh 'docker push ${ECR_REPOSITORY_URI}/my-ecr-repo:${BUILD_NUMBER}'
-       //      }
-       //  }
-       //  stage('Kubernetes Edit Files') {
-       //      steps {
-       //             sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY_URI}/my-ecr-repo:${BUILD_NUMBER}|g' ./backend.yaml"
-       //             sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY_URI}/project-repo:${BUILD_NUMBER}|g' ./frontend.yaml"
-       //      }
-       // }
+                 sh 'docker build -t ${ECR_REPOSITORY_URI}/project-repo:${BUILD_NUMBER} ./frontend/.'
+                 sh 'aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPOSITORY_URI}'
+                 sh 'docker push ${ECR_REPOSITORY_URI}/project-repo:${BUILD_NUMBER}'
+             }
+         }
+         stage('Build Docker Image back') {
+             steps {
+                 sh 'docker build -t ${ECR_REPOSITORY_URI}/my-ecr-repo:${BUILD_NUMBER} ./backend/.'
+                 sh 'aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPOSITORY_URI}'
+                 sh 'docker push ${ECR_REPOSITORY_URI}/my-ecr-repo:${BUILD_NUMBER}'
+             }
+         }
+         stage('Kubernetes Edit Files') {
+             steps {
+                    sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY_URI}/my-ecr-repo:${BUILD_NUMBER}|g' ./backend.yaml"
+                    sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY_URI}/project-repo:${BUILD_NUMBER}|g' ./frontend.yaml"
+                      sh "aws eks update-kubeconfig --region eu-west-1 --name nti "
+             }
+        }
 
         
-        stage('kubectl aplly files') {
+        stage('apply database') {
             steps {
-                script {
-                  // Set permissions for file.sh before running it
-                  sh 'chmod +x kubernetes.sh && ./kubernetes.sh'
-                }
-                //sh 'kubectl apply -f secret.yaml --validate=false'  
-               // sh 'kubectl apply -f configmap.yaml --validate=false'
-               // sh 'kubectl apply -f postgress_serves.yaml --validate=false'
-               // sh 'kubectl apply -f postgress.yaml --validate=false'  
-               // sh 'kubectl apply -f backend.yaml --validate=false'  
-               // sh 'kubectl apply -f backend_service.yaml --validate=false'  
-               //sh 'kubectl apply -f frontend.yaml --validate=false '  
-               // sh 'kubectl apply -f frontend_service.yml --validate=false '  
+             
+                 sh 'kubectl apply -f secret.yaml '  
+                 sh 'kubectl apply -f configmap.yaml '
+                 sh 'kubectl apply -f postgress_serves.yaml '
+                 sh 'kubectl apply -f postgress.yaml '  
             }
         }
+
+        stage('apply backend') {
+            steps {
+                  sh 'kubectl apply -f backend.yaml '  
+                  sh 'kubectl apply -f backend_service.yaml '  
+            }
+        }
+
+        stage('apply frontend') {
+            steps {
+                sh 'kubectl apply -f frontend.yaml '  
+                sh 'kubectl apply -f frontend_service.yml '  
+            }
+        }
+
     }
 }
