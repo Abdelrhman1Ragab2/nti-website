@@ -36,10 +36,12 @@ pipeline {
                     
 
                     // Use sh block to execute shell commands
-                    sh "sed -i "s|image: .*$|image: ${newImageNameBack}|" ${backendFile}"
+                    sh "sed -i \"s|image: .*$|image: ${newImageNameBack}|\" ${backendFile}"
+
                         
                         
-                    sh "sed -i "s|image: .*$|image: ${newImageNameFront}|" ${frontFile}"
+                    sh "sed -i \"s|image: .*$|image: ${newImageNameFront}|\" ${frontFile}"
+
                 }
 
             }
