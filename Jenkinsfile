@@ -35,7 +35,7 @@ pipeline {
         
         stage('kubectl aplly files') {
             steps {
-                sh 'kubectl apply -f secret.yaml'  
+                sh 'kubectl apply -f secret.yaml --validate=false'  
                 sh 'kubectl apply -f configmap.yaml'
                 sh 'kubectl apply -f postgress_serves.yaml'
                 sh 'kubectl apply -f postgress.yaml'  
