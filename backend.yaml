@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  template:
+    metadata:
+      name: backend
+      labels:
+        app: backend-app
+        web: nti
+    spec:
+      containers:
+        - name: backend-container
+          image: abdelrhman1ragab2/backend:2
+          ports:
+            - containerPort: 3000
+    
+
+          env:
+          - name: DB_HOST   
+            valueFrom:
+                configMapKeyRef:
+                  name: database-config
+                  key: database_url
+
+          - name: DB_USER    
+            valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: dbUserName
+
+          - name: DB_PASSWORD           
+            valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: dbPassword
+            
+          - name: DB_NAME           
+            valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: dbName
+      # Ensure that the backend waits for the database to be ready
+      initContainers:
+      - name: wait-for-db
+        image: busybox
+        command: ['sh', '-c', 'until nc -z postgress-service 5432; do echo waiting for postgress-service; sleep 2; done;']
+          
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-app
+      web: nti
+      

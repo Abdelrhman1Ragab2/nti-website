@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  template:
+    metadata:
+      name: postgres
+      labels:
+        app: postgres
+        web: nti
+    spec:
+      containers:
+        - name: postgres
+          image: postgres
+          ports:
+            - containerPort: 5432
+  
+          env:
+          - name: POSTGRES_USER    
+            valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: dbUserName
+
+          - name: POSTGRES_PASSWORD           
+            valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: dbPassword
+            
+          - name: POSTGRES_DB           
+            valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: dbName
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+      web: nti
+      
