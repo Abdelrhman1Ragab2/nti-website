@@ -10,37 +10,37 @@ pipeline {
     }
 
     stages {
-        stage('Build Docker Image front') {
-            steps {
+       //  stage('Build Docker Image front') {
+       //      steps {
                
-                sh 'docker build -t ${ECR_REPOSITORY_URI}/project-repo:${BUILD_NUMBER} ./frontend/.'
-                sh 'aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPOSITORY_URI}'
-                sh 'docker push ${ECR_REPOSITORY_URI}/project-repo:${BUILD_NUMBER}'
-            }
-        }
-        stage('Build Docker Image back') {
-            steps {
-                sh 'docker build -t ${ECR_REPOSITORY_URI}/my-ecr-repo:${BUILD_NUMBER} ./backend/.'
-                sh 'aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPOSITORY_URI}'
-                sh 'docker push ${ECR_REPOSITORY_URI}/my-ecr-repo:${BUILD_NUMBER}'
-            }
-        }
-        stage('Kubernetes Edit Files') {
-            steps {
-                   sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY_URI}/my-ecr-repo:${BUILD_NUMBER}|g' ./backend.yaml"
-                   sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY_URI}/project-repo:${BUILD_NUMBER}|g' ./frontend.yaml"
-            }
-       }
+       //          sh 'docker build -t ${ECR_REPOSITORY_URI}/project-repo:${BUILD_NUMBER} ./frontend/.'
+       //          sh 'aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPOSITORY_URI}'
+       //          sh 'docker push ${ECR_REPOSITORY_URI}/project-repo:${BUILD_NUMBER}'
+       //      }
+       //  }
+       //  stage('Build Docker Image back') {
+       //      steps {
+       //          sh 'docker build -t ${ECR_REPOSITORY_URI}/my-ecr-repo:${BUILD_NUMBER} ./backend/.'
+       //          sh 'aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPOSITORY_URI}'
+       //          sh 'docker push ${ECR_REPOSITORY_URI}/my-ecr-repo:${BUILD_NUMBER}'
+       //      }
+       //  }
+       //  stage('Kubernetes Edit Files') {
+       //      steps {
+       //             sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY_URI}/my-ecr-repo:${BUILD_NUMBER}|g' ./backend.yaml"
+       //             sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY_URI}/project-repo:${BUILD_NUMBER}|g' ./frontend.yaml"
+       //      }
+       // }
 
         
         stage('kubectl aplly files') {
             steps {
-                sh 'kubectl apply -f secret.yaml --validate=false'  
-                sh 'kubectl apply -f configmap.yaml'
-                sh 'kubectl apply -f postgress_serves.yaml'
-                sh 'kubectl apply -f postgress.yaml'  
-                sh 'kubectl apply -f backend.yaml'  
-                sh 'kubectl apply -f backend_service.yaml'  
+                //sh 'kubectl apply -f secret.yaml --validate=false'  
+               // sh 'kubectl apply -f configmap.yaml'
+               // sh 'kubectl apply -f postgress_serves.yaml'
+               // sh 'kubectl apply -f postgress.yaml'  
+               // sh 'kubectl apply -f backend.yaml'  
+               // sh 'kubectl apply -f backend_service.yaml'  
                 sh 'kubectl apply -f frontend.yaml'  
                 sh 'kubectl apply -f frontend_service.yml'  
             }
