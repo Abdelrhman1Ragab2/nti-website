@@ -36,13 +36,13 @@ pipeline {
         stage('kubectl aplly files') {
             steps {
                 //sh 'kubectl apply -f secret.yaml --validate=false'  
-               // sh 'kubectl apply -f configmap.yaml'
-               // sh 'kubectl apply -f postgress_serves.yaml'
-               // sh 'kubectl apply -f postgress.yaml'  
-               // sh 'kubectl apply -f backend.yaml'  
-               // sh 'kubectl apply -f backend_service.yaml'  
-                sh 'kubectl apply -f frontend.yaml'  
-                sh 'kubectl apply -f frontend_service.yml'  
+               // sh 'kubectl apply -f configmap.yaml --validate=false'
+               // sh 'kubectl apply -f postgress_serves.yaml --validate=false'
+               // sh 'kubectl apply -f postgress.yaml --validate=false'  
+               // sh 'kubectl apply -f backend.yaml --validate=false'  
+               // sh 'kubectl apply -f backend_service.yaml --validate=false'  
+                sh 'kubectl apply -f frontend.yaml --validate=false '  
+                sh 'kubectl apply -f frontend_service.yml --validate=false '  
             }
         }
     }
