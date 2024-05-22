@@ -25,27 +25,25 @@ pipeline {
                 sh 'docker push ${ECR_REPOSITORY_URI}/my-ecr-repo:${BUILD_NUMBER}'
             }
         }
-        stage('kube edit files') {
+        stage('Kubernetes Edit Files') {
             steps {
-                 script {
+                script {
                     def backendFile = './backend.yaml'
-                    def frontFile = './frontend.yaml'
-                     
-                    def newImageNameFront = '${ECR_REPOSITORY_URI}/project-repo:${BUILD_NUMBER}'
-                    def newImageNameBack = '${ECR_REPOSITORY_URI}/my-ecr-repo:${BUILD_NUMBER}'
-                    
-
-                    // Use sh block to execute shell commands
-                    sh "sed -i \"s|image: .*$|image: ${newImageNameBack}|\" ${backendFile}"
-
-                        
-                        
-                    sh "sed -i \"s|image: .*$|image: ${newImageNameFront}|\" ${frontFile}"
-
+                    def frontendFile = './frontend.yaml'
+        
+                    def newImageNameFront = "${ECR_REPOSITORY_URI}/project-repo:${BUILD_NUMBER}"
+                    def newImageNameBack = "${ECR_REPOSITORY_URI}/my-ecr-repo:${BUILD_NUMBER}"
+        
+                    // Update the backend image
+                    sh "sed -i 's|image: .*$|image: ${newImageNameBack}|' ${backendFile}"
+        
+                    // Update the frontend image
+                    sh "sed -i 's|image: .*$|image: ${newImageNameFront}|' ${frontendFile}"
+        
+                    // You can add more steps here to handle other Kubernetes resources, if needed
                 }
-
             }
-        }
+       }
 
         
         stage('kubectl aplly files') {
