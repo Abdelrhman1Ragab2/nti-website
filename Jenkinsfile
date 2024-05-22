@@ -28,17 +28,18 @@ pipeline {
         stage('Kubernetes Edit Files') {
             steps {
                 script {
-                    def backendFile = './backend.yaml'
-                    def frontendFile = './frontend.yaml'
+                    //  def backendFile = './backend.yaml'
+                    //  def frontendFile = './frontend.yaml'
         
                     def newImageNameFront = "${ECR_REPOSITORY_URI}/project-repo:${BUILD_NUMBER}"
                     def newImageNameBack = "${ECR_REPOSITORY_URI}/my-ecr-repo:${BUILD_NUMBER}"
+
         
                     // Update the backend image
-                    sh "sed -i 's|image: .*$|image: ${newImageNameBack}|' ${backendFile}"
+                    sh "sed -i 's|image: .*$|image: \$newImageNameBack|' backend.yaml"
         
                     // Update the frontend image
-                    sh "sed -i 's|image: .*$|image: ${newImageNameFront}|' ${frontendFile}"
+                    sh "sed -i 's|image: .*$|image: \$newImageNameBack|' frontend.yaml"
         
                     // You can add more steps here to handle other Kubernetes resources, if needed
                 }
